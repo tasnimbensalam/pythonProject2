@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_TRUCK_MODIFICATIONS']= False
 
 db = SQLAlchemy(app)
 
-class Data(db.Model):
+class Dataclassroom(db.Model):
     __tablename__ = 'data2'
     id = db.Column(db.Integer, primary_key = True)
     classroom = db.Column(db.String(100))
@@ -38,14 +38,12 @@ class Data(db.Model):
         self.absenties= absenties
 
 
-def calculate_absenties(numb_abs) :
-    i =1
-    return numb_abs + i
-
-
 with app.app_context():
     db.create_all()
 
+def calculate_absenties(numb_abs) :
+    numb=numb_abs+1
+    return numb
 
 
 @app.route('/')
@@ -60,6 +58,7 @@ def insert():
         email = request.form['email']
         phone = request.form['phone']
         absenties = request.form['absenties']
+
 
     my_data = Data(name,email,phone,absenties)
     db.session.add(my_data)
@@ -80,6 +79,7 @@ def update():
         return redirect(url_for('Index'))\
 
 
+
 @app.route('/delete/<id>/', methods=['GET', 'POST'])
 def delete(id):
     my_data = Data.query.get(id)
@@ -89,22 +89,45 @@ def delete(id):
     return redirect(url_for('Index'))
 
 @app.route('/absent/<id>/', methods=['GET', 'POST'])
-def absent(number):
-    num = Data.query.filter_by(id=number).first()
-    num_abs = num.absenties
-    calculate_absenties(num_abs)
+def absent(id):
+    num = Data.query.get(id)
+    numb_abs= num.absenties
+    num.absenties=calculate_absenties(numb_abs)
     db.session.commit()
     return redirect(url_for('Index'))
 
-
 @app.route('/list', methods=['GET', 'POST'])
 def list():
+    all_data = Dataclassroom.query.all()
+    return render_template('list.html' , classrooms = all_data)
+
+@app.route('/insert_class',methods = ['POST'])
+def insert_class():
     if request.method == 'POST':
+        classrooms = request.form['classroom']
 
-        return redirect(url_for('index'))
 
-    return render_template('list.html')
+    my_data = Dataclassroom(classrooms)
+    db.session.add(my_data)
+    db.session.commit()
 
+    return redirect(url_for('list'))\
+
+@app.route('/update_class', methods=['GET', 'POST'])
+def update_class():
+    if request.method == 'POST':
+        my_data = Dataclassroom.query.get(request.form.get('id'))
+        my_data.classroom = request.form['classroom']
+        db.session.commit()
+        return redirect(url_for('list'))\
+
+@app.route('/delete_class/<id>/', methods=['GET', 'POST'])
+def delete_class(id):
+    my_data = Dataclassroom.query.get(id)
+    db.session.delete(my_data)
+    db.session.commit()
+
+    return redirect(url_for('list'))
 if __name__=="__main__":
     app.run(debug=True)
 

@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col md-12">
                 <div class="jumbotron p-3">
-                    <h2>Manage Classrooms <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#mymodal" >Add new classroom</button></h2>
+                    <h2>Manage Classrooms <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#mymodall" >Add new classroom</button></h2>
                 <table class="table table-hover table-dark">
                     <tr>
                         <th>ID</th>
@@ -24,9 +24,11 @@
 
                     <tr>
                         <td>{{row.id}}</td>
+                        <td>{{row.classroom}}</td>
                         <td>
-                            <a href="/update/{{row.id}}" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaledit{{row.id}}">Edit</a>
-                            <a href="/delete/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+                            <a href="/update_class/{{row.id}}" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaledit{{row.id}}">Edit</a>
+                            <a href="/delete_class/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+                             <a href="#" class="btn btn-info btn-xs" onclick="#"> Check List </a>
                         </td>
                     </tr>
 <!-- edit -->
@@ -34,44 +36,49 @@
                        <div class="modal-dialog">
                           <div class="modal-content">
                              <div class="modal-header">
-                                <h4 class="modal-title">Update Information</h4>
+                                <h4 class="modal-title">Update classroom</h4>
                              </div>
                               <div class="modal-body">
-                           <form action="{{url_for('insertt')}}" method="post">
+                           <form action="{{url_for('update_class')}}" method="post">
                                <div class="form-group">
                                    <label>Classroom :</label>
                                    <input type="text" class="form-control" name="classroom" >
                                </div>
+                                <br>
+                                <button class="btn btn-primary" type="submit">Update</button>
                            </form>
 
                              <div class="modal-footer">
-                                        <button class="btn btn-primary" type="submit">Update</button>
+
                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="close">Close</button>
                              </div>
                           </div>
                        </div>
                        </div>
                     {% endfor %}
+                    </div>
                 </table>
                 </div>
 <!-- add -->
 
-                <div id="mymodal" class="modal fade" role="dialog">
+                <div id="mymodall" class="modal fade" role="dialog">
                    <div class="modal-dialog">
                        <div class="modal-content">
                            <div class="modal-header">
                                <h4 class="modal-title">Add Classroom</h4>
                            </div>
                            <div class="modal-body">
-                           <form action="{{url_for('insert')}}" method="post">
+                           <form action="{{url_for('insert_class')}}" method="post">
                                <div class="form-group">
                                    <label>Classroom :</label>
-                                   <input type="text" class="form-control" name="classroom" >
+                                   <input type="text" class="form-control" name="classroom" required="1" >
                                </div>
+                               <br>
+                                <button class="btn btn-primary" type="submit">Add Classroom</button>
                            </form>
                            </div>
                             <div class="modal-footer">
-                                   <button class="btn btn-primary" type="submit">Add Classroom</button>
+
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="close" >Close</button>
                             </div>
 
