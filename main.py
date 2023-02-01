@@ -30,6 +30,8 @@ class Data(db.Model):
     email = db.Column(db.String(100))
     phone= db.Column(db.String(100))
     absenties= db.Column(db.Integer)
+    Data_id = db.Column(db.Integer, db.ForeignKey('Data.id'))
+    Data = db.relationship('Data', backref=db.backref('Data', lazy=True))
 
     def __init__(self,name,email,phone,absenties):
         self.name= name
@@ -78,8 +80,6 @@ def update():
         db.session.commit()
         return redirect(url_for('Index'))\
 
-
-
 @app.route('/delete/<id>/', methods=['GET', 'POST'])
 def delete(id):
     my_data = Data.query.get(id)
@@ -99,36 +99,38 @@ def absent(id):
 @app.route('/list', methods=['GET', 'POST'])
 def list():
     all_data = Dataclassroom.query.all()
+    print(all_data)
     return render_template('list.html' , classrooms = all_data)
 
 @app.route('/insert_class',methods = ['POST'])
 def insert_class():
     if request.method == 'POST':
-        classrooms = request.form['classroom']
+        classroom = request.form['classroom']
 
-
-    my_data = Dataclassroom(classrooms)
+    my_data = Dataclassroom(classroom)
     db.session.add(my_data)
     db.session.commit()
 
     return redirect(url_for('list'))\
 
-@app.route('/update_class', methods=['GET', 'POST'])
-def update_class():
+@app.route('/update_class/<id>', methods=['POST'])
+def update_class(id):
     if request.method == 'POST':
-        my_data = Dataclassroom.query.get(request.form.get('id'))
+        my_data = Dataclassroom.query.get(id)
         my_data.classroom = request.form['classroom']
         db.session.commit()
         return redirect(url_for('list'))\
+
 
 @app.route('/delete_class/<id>/', methods=['GET', 'POST'])
 def delete_class(id):
     my_data = Dataclassroom.query.get(id)
     db.session.delete(my_data)
     db.session.commit()
+    return redirect(url_for('list'))\
 
-    return redirect(url_for('list'))
+
 if __name__=="__main__":
     app.run(debug=True)
 
-#--------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------

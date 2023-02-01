@@ -16,7 +16,7 @@
                 <table class="table table-hover table-dark">
                     <tr>
                         <th>ID</th>
-                        <th>Classes</th>
+                        <th>Classrooms</th>
                         <th>Action</th>
                     </tr>
 
@@ -26,39 +26,38 @@
                         <td>{{row.id}}</td>
                         <td>{{row.classroom}}</td>
                         <td>
-                            <a href="/update_class/{{row.id}}" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaledit{{row.id}}">Edit</a>
-                            <a href="/delete_class/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
-                             <a href="#" class="btn btn-info btn-xs" onclick="#"> Check List </a>
+                            <a href="/update_class/{{row.id}}" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaleditt{{row.id}}">Edit</a>
+                            <a href="/delete_class/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete this classroom?')">Delete</a>
+                             <a href="{{ url_for('Index') }}"  class="btn btn-info btn-xs" > Check Names </a>
                         </td>
                     </tr>
 <!-- edit -->
-                    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+                    <div id="modaleditt{{row.id}}" class="modal fade" role="dialog">
                        <div class="modal-dialog">
                           <div class="modal-content">
                              <div class="modal-header">
                                 <h4 class="modal-title">Update classroom</h4>
                              </div>
                               <div class="modal-body">
-                           <form action="{{url_for('update_class')}}" method="post">
+                           <form action="{{url_for('update_class', id=row.id)}}" method="POST">
                                <div class="form-group">
                                    <label>Classroom :</label>
-                                   <input type="text" class="form-control" name="classroom" >
+                                   <input type="text" class="form-control" name="classroom" value="{{ row.classroom }}" >
                                </div>
-                                <br>
-                                <button class="btn btn-primary" type="submit">Update</button>
-                           </form>
 
                              <div class="modal-footer">
-
+                                  <button class="btn btn-primary" type="submit">Update</button>
                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="close">Close</button>
+                             </div>
+                           </form>
                              </div>
                           </div>
                        </div>
                        </div>
                     {% endfor %}
-                    </div>
                 </table>
-                </div>
+            </div>
+        </div>
 <!-- add -->
 
                 <div id="mymodall" class="modal fade" role="dialog">
@@ -73,14 +72,12 @@
                                    <label>Classroom :</label>
                                    <input type="text" class="form-control" name="classroom" required="1" >
                                </div>
-                               <br>
-                                <button class="btn btn-primary" type="submit">Add Classroom</button>
-                           </form>
-                           </div>
                             <div class="modal-footer">
-
+                                   <button class="btn btn-primary float-end" type="submit"  >Add Classroom</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="close" >Close</button>
                             </div>
+                           </form>
+                           </div>
 
                     </div>
             </div>
